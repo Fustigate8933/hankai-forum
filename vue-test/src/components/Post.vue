@@ -8,14 +8,22 @@
   const postId = route.params.postId
   const title = ref("")
   const description = ref("")
+  const postUserId = ref("")
   const postComments = ref([])
   const newComment = ref("")
+  const loggedIn = ref(false)
+  const isOP = ref(false)
+  const jwtToken = ref("")
+  const userId = ref("")
 
   async function getPost(){
     const response = await fetch(`http://localhost:3000/api/posts/${postId}`)
     const post = (await response.json())[0]
     title.value = post.q
     description.value = post.d
+    postUserId.value = post.userId
+    await getPostComments()
+    await isLoggedIn()
   }
 
   async function getPostComments(){
@@ -64,14 +72,54 @@
     await router.replace("/")
   }
 
+  async function checkIsOP(){
+    const token = localStorage.getItem('token')
+    const response = await fetch("http://localhost:3000/api/auth/user/details", {
+      method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "token": token
+        }),
+    });
+    const data = await response.json()
+    userId.value = data.userId
+    if (userId.value === postUserId.value){
+      isOP.value = true
+    }
+    console.log(isOP.value)
+  }
+
+  function isLoggedIn(){
+    const token = localStorage.getItem('token')
+    if (!!token){
+      jwtToken.value = token
+      loggedIn.value = true
+      checkIsOP()
+    }else{
+      console.log("Not logged In")
+    }
+  }
+
+  function loginClick(){
+    router.push("/login")
+  }
+
+  function logoutClick(){
+    localStorage.removeItem("token")
+    router.push("/")
+  }
+
   onMounted(() => {
     getPost()
-    getPostComments()
   })
 </script>
 
+
 <template>
-  <div class="left-column">
+  <div v-if="isOP" class="left-column">
     <button class="side-button" @click="deletePost">Delete Post</button>
   </div>
   <div class="middle-column ">
@@ -84,14 +132,21 @@
       </p>
     </div>
     <div class="post-comments">
-      <div class="add-comment">
+      <div v-if="loggedIn" class="add-comment">
         <textarea class="input-area" rows="2" v-model="newComment" placeholder="Add a comment!" />
-        <button class="submit-button" @click="submit">Submit!</button>
+        <button class="side-button submit-button" @click="submit">Submit!</button>
       </div>
       <CommentCard v-for="comment in postComments" :comment="comment" />
     </div>
   </div>
+  <div v-if="!loggedIn" class="right-column">
+    <button @click="loginClick" class="side-button">Login</button>
+  </div>
+  <div v-else class="right-column">
+    <button @click="logoutClick" class="side-button">Logout</button>
+  </div>
 </template>
+
 
 <style scoped>
 .add-comment {
@@ -110,6 +165,7 @@
   border: 2px white solid;
   border-radius: 10px;
   height: 3.4rem;
+  margin-top: 0;
 }
 
 .delete-button {

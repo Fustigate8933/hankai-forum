@@ -3,10 +3,6 @@
 
   const router = useRouter()
   const route = useRoute()
-
-  function loginClick(){
-    router.push("/login")
-  }
 </script>
 
 
@@ -14,9 +10,6 @@
   <div id="wrapper">
     <div class="main-body">
       <router-view></router-view>
-      <div class="right-column">
-        <button @click="loginClick" class="side-button">Login</button>
-      </div>
     </div>
   </div>
 </template>

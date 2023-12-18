@@ -36,6 +36,22 @@
         }),
       });
     console.log(await response.json())
+
+    // login after sign up
+    const response2 = await fetch("http://localhost:3000/api/auth/user/signin", {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username.value,
+        password: password.value
+      }),
+    });
+    const data = await response2.json()
+    const token = data.token
+    localStorage.setItem("token", token)
     await router.push("/")
   }
 </script>
@@ -53,13 +69,13 @@
       <h1>
         Username:
       </h1>
-      <input :class="userExists ? 'input-area-red' : 'input-area'" v-model="username" placeholder="You username" />
+      <input :class="userExists ? 'input-area-red' : 'input-area'" v-model="username" placeholder="Your username 🧑🏻‍🦱" />
     </div>
     <div class="input-block">
       <h1>
         Password:
       </h1>
-      <input class="input-area" v-model="password" placeholder="Your password" type="password" />
+      <input class="input-area" v-model="password" placeholder="Your password 🔑" type="password" />
     </div>
     <button v-if="!userExists" @click="signupSubmit" class="side-button" style="margin-top: 0">Submit!</button>
     <p class="user-exists-text" v-else>Username already exists, pick another one!</p>
@@ -83,6 +99,17 @@
   font-size: large;
   min-height: 1.4em;
   margin-left: 9px;
+  background-color: rgba(0, 0, 0, 0);
+  color: white;
+  border: 1px white solid;
+  border-radius: 10px;
+  padding: 6px 8px 6px 8px;
+}
+
+.input-area:focus{
+  outline: none;
+  border-color: yellow;
+  caret-color: lightyellow;
 }
 
 .input-area-red {

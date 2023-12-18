@@ -44,10 +44,7 @@ mongoClient.connect(connectionString)
         router.post("/auth/user/signin", async (req, res) => {
             // assume at frontend user exists
             const { username, password } = req.body;
-            console.log(username, password)
             const user = await userCollection.find({username: username}).toArray()
-
-            console.log(user)
 
             if (user.length === 0){
                 res.send(false)
@@ -60,6 +57,18 @@ mongoClient.connect(connectionString)
                     res.send(false)
                 }
             }
+        })
+
+        router.post("/auth/user/details", async (req, res) => {
+            const token = req.body.token
+            console.log(token)
+            jwt.verify(token, jwtSecret, (err, decoded) => {
+                if (err){
+                    res.send(false)
+                }else{
+                    res.send({ "userId": decoded.userId})
+                }
+            })
         })
 
 
@@ -83,6 +92,7 @@ mongoClient.connect(connectionString)
         })
 
         router.post("/posts/add", (req, res) => {
+            req.body.userId = new ObjectId(req.body.userId)
             postCollection.insertOne(req.body)
                 .then(result => {
                     res.send(result)

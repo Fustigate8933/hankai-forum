@@ -1,9 +1,10 @@
 <script setup>
-  import { ref } from "vue"
+  import { ref, onMounted } from "vue"
   import { useRouter } from "vue-router"
 
   const title = ref("")
   const description = ref("")
+  const userId = ref("")
 
   const router = useRouter()
 
@@ -16,16 +17,33 @@
         },
         body: JSON.stringify({
           q: title.value,
-          d: description.value
+          d: description.value,
+          userId: userId.value
         }),
       });
     console.log(await response.json())
     await router.push("/")
   }
+
+  onMounted(async () => {
+    const token = localStorage.getItem('token')
+    const response = await fetch("http://localhost:3000/api/auth/user/details", {
+      method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "token": token
+        }),
+    });
+    const data = await response.json()
+    userId.value = data.userId
+  })
 </script>
 
 <template>
-  <div class="middle-column">
+  <div class="middle-column" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%">
     <div class="new-obj">
       <p>
         Post title:
@@ -38,7 +56,7 @@
       </p>
       <textarea class="input-area" rows="1" v-model="description" placeholder="Elaborate on your topic!" />
     </div>
-    <button id="post-submit-button" @click="submit">Submit!</button>
+    <button class="side-button" @click="submit">Submit!</button>
   </div>
 </template>
 
@@ -53,6 +71,7 @@ p {
 .new-obj {
   display: flex;
   align-items: center;
+  width: 100%
 }
 
 .input-area {
@@ -60,6 +79,7 @@ p {
   width: 100%;
   resize: vertical;
   min-height: 1.6em;
+  flex-grow: 2;
 }
 
 #post-submit-button {

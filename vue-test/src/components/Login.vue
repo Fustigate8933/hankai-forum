@@ -13,9 +13,7 @@
   }
 
   watch(username, async (newUsername, oldUsername) => {
-    if (newUsername === ""){
-      wrong.value = false
-    }
+    wrong.value = false
   })
 
   async function loginSubmit(){
@@ -36,8 +34,9 @@
       wrong.value = true
     }else{
       wrong.value = false
-      console.log("Credentials correct")
-      console.log(data.token)
+      const token = data.token
+      localStorage.setItem("token", token)
+      await router.push("/")
     }
   }
 </script>
@@ -55,13 +54,13 @@
       <h1>
         Username:
       </h1>
-      <input class="input-area" v-model="username" placeholder="You username" />
+      <input class="input-area" v-model="username" placeholder="Your username 🧑🏻‍🦱" />
     </div>
     <div class="input-block">
       <h1>
         Password:
       </h1>
-      <input class="input-area" v-model="password" placeholder="Your password" />
+      <input class="input-area" v-model="password" placeholder="Your password 🔑" type="password" />
     </div>
     <p v-if="wrong" style="color: red; margin-top: -5px">Username or password incorrect</p>
     <button @click="loginSubmit" class="side-button" style="margin-top: 0">Submit!</button>
@@ -81,6 +80,17 @@
   font-size: large;
   min-height: 1.4em;
   margin-left: 9px;
+  background-color: rgba(0, 0, 0, 0);
+  color: white;
+  border: 1px white solid;
+  border-radius: 10px;
+  padding: 6px 8px 6px 8px;
+}
+
+.input-area:focus{
+  outline: none;
+  border-color: yellow;
+  caret-color: lightyellow;
 }
 
 .middle-column {
