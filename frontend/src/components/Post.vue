@@ -138,7 +138,8 @@
         <textarea class="input-area" rows="2" v-model="newComment" placeholder="Add a comment!" />
         <button class="side-button submit-button" @click="submit">Submit!</button>
       </div>
-      <CommentCard v-if="loaded" v-for="comment in postComments" :comment="comment" :userId="userId" />
+      <p v-if="postComments.length === 0" style="color:#9ccc65">No comments</p>
+      <CommentCard v-else-if="loaded" v-for="comment in postComments" :comment="comment" :userId="userId" />
       <CommentCard v-else v-for="comment in postComments" :comment="comment" :userId="userId" />
     </div>
   </div>
