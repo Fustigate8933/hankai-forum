@@ -139,6 +139,7 @@
         <button class="side-button submit-button" @click="submit">Submit!</button>
       </div>
       <CommentCard v-if="loaded" v-for="comment in postComments" :comment="comment" :userId="userId" />
+      <CommentCard v-else v-for="comment in postComments" :comment="comment" :userId="userId" />
     </div>
   </div>
   <div v-if="!loggedIn" class="right-column">
