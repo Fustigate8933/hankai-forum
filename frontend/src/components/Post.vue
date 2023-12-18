@@ -16,6 +16,7 @@
   const jwtToken = ref("")
   const userId = ref("")
   const loaded = ref(false)
+  const username = ref("")
 
   async function getPost(){
     const response = await fetch(`http://localhost:3000/api/posts/${postId}`)
@@ -99,6 +100,7 @@
     if (!!token){
       jwtToken.value = token
       loggedIn.value = true
+      username.value = localStorage.getItem("username")
       checkIsOP()
     }else{
       console.log("Not logged In")
@@ -147,6 +149,7 @@
     <button @click="loginClick" class="side-button">Login</button>
   </div>
   <div v-else class="right-column">
+    <h3>Logged in as {{ username }}</h3>
     <button @click="logoutClick" class="side-button">Logout</button>
   </div>
 </template>

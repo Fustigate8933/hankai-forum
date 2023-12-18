@@ -8,6 +8,7 @@
 
   const cards = ref([])
   const loggedIn = ref(false)
+  const username = ref("")
 
   async function getPosts(){
     const response = await fetch("http://localhost:3000/api/posts");
@@ -24,6 +25,7 @@
     if (!!token){
       loggedIn.value = true
       console.log("Logged In")
+      username.value = localStorage.getItem("username")
     }else{
       console.log("Not logged In")
     }
@@ -61,6 +63,7 @@
     <button @click="loginClick" class="side-button">Login</button>
   </div>
   <div v-else class="right-column" style="margin-top: 15px">
+    <h3>Logged in as {{ username }}</h3>
     <button @click="logoutClick" class="side-button">Logout</button>
   </div>
 </template>

@@ -52,6 +52,7 @@
     const data = await response2.json()
     const token = data.token
     localStorage.setItem("token", token)
+    localStorage.setItem("username", username.value)
     await router.push("/")
   }
 </script>
