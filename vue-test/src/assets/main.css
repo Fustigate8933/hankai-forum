@@ -1,8 +1,11 @@
 body {
-  padding: 10px 15px 0 15px;
+  padding: 0 15px 0 15px;
+  margin: 0;
 }
 
 html {
   background-color: #333333;
   color: white;
+  padding: 0;
+  margin: 0;
 }

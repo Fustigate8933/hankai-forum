@@ -4,12 +4,20 @@
   const router = useRouter()
   const route = useRoute()
 
+  function loginClick(){
+    router.push("/login")
+  }
 </script>
 
 
 <template>
   <div id="wrapper">
-    <router-view></router-view>
+    <div class="main-body">
+      <router-view></router-view>
+      <div class="right-column">
+        <button @click="loginClick" class="side-button">Login</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -23,13 +31,23 @@
   text-align: center;
 }
 
-.grid-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 0 20px 0 20px;
+.side-button {
+  font-size: small;
+  background-color: rgba(0, 0, 0, 0);
+  color: white;
+  border: 1px white solid;
+  border-radius: 4px;
+  padding: 10px 15px 10px 15px;
+  margin-top: 25px;
+}
+
+.side-button:hover{
+  cursor: pointer;
+}
+
+.title-text{
+  font-size: x-large;
+  text-decoration: white;
 }
 
 .left-column {
@@ -47,5 +65,6 @@
 .main-body {
   display: grid;
   grid-template-columns: 300px auto 300px;
+  height: 100vh;
 }
 </style>

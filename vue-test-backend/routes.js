@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 
 require("dotenv").config()
 const mongoClient = require("mongodb").MongoClient
 const { ObjectId } = require("mongodb")
 const connectionString = process.env.DB_STRING
+const jwtSecret = process.env.JWT_SECRET
 
 
 mongoClient.connect(connectionString)
@@ -14,6 +17,55 @@ mongoClient.connect(connectionString)
         const db = client.db("Forum")
         const postCollection = db.collection("Post")
         const commentCollection = db.collection("Comment")
+        const userCollection = db.collection("User")
+
+
+
+
+        router.get("/auth/user/exists/:userId", async (req, res) => {
+            const users = await userCollection.find({username: req.params.userId}).toArray()
+            res.send(users.length !== 0)
+        })
+
+        router.post("/auth/user/signup", async (req, res) => {
+            // assume at frontend user exist is checked
+            const saltRounds = 10
+            req.body.password = await bcrypt.hash(req.body.password, saltRounds)
+            userCollection.insertOne(req.body)
+                .then(result => {
+                    res.send(result)
+                })
+                .catch(error => {
+                    console.error("Error: ", error)
+                    res.send(error)
+                })
+        })
+
+        router.post("/auth/user/signin", async (req, res) => {
+            // assume at frontend user exists
+            const { username, password } = req.body;
+            console.log(username, password)
+            const user = await userCollection.find({username: username}).toArray()
+
+            console.log(user)
+
+            if (user.length === 0){
+                res.send(false)
+            }else{
+                const passwordMatch = await bcrypt.compare(password, user[0].password);
+                if (passwordMatch){
+                    const token = jwt.sign({ userId: user[0]._id }, jwtSecret, { expiresIn: '1d' })
+                    res.send({token})
+                }else{
+                    res.send(false)
+                }
+            }
+        })
+
+
+
+
+
 
         router.get("/posts", async (req, res) => {
             const postsList = await postCollection.find({}).toArray()
@@ -33,7 +85,6 @@ mongoClient.connect(connectionString)
         router.post("/posts/add", (req, res) => {
             postCollection.insertOne(req.body)
                 .then(result => {
-                    // console.log(result)
                     res.send(result)
                 })
                 .catch(error => {

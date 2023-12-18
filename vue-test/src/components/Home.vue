@@ -27,31 +27,16 @@
 
 
 <template>
-  <header id="page-title">
-    <p class="title-text">
-      Forum
-    </p>
-    <router-link to="/addpost">
-      <button id="add-post-button">Add Post</button>
-    </router-link>
-  </header>
-
-  <div class="main-body">
-    <div class="left-column grid-column">
-      <p>
-
+  <div class="middle-column">
+    <div id="page-title">
+      <p class="title-text">
+        Forum
       </p>
+      <router-link to="/addpost">
+        <button class="side-button" style="margin-top: 0">Add Post</button>
+      </router-link>
     </div>
-
-    <div class="middle-column grid-column">
-      <Card v-for="item in cards" :question="item.q" :description="item.d" :postUrl="item.to" />
-    </div>
-
-    <div class="right-column grid-column">
-      <p>
-
-      </p>
-    </div>
+    <Card v-for="item in cards" :question="item.q" :description="item.d" :postUrl="item.to" />
   </div>
 </template>
 

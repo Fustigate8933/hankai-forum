@@ -25,19 +25,21 @@
 </script>
 
 <template>
-  <div class="new-obj">
-    <p>
-      Post title:
-    </p>
-    <textarea class="input-area" rows="1" v-model="title" placeholder="What topic do you want to post about?" />
+  <div class="middle-column">
+    <div class="new-obj">
+      <p>
+        Post title:
+      </p>
+      <textarea class="input-area" rows="1" v-model="title" placeholder="What topic do you want to post about?" />
+    </div>
+    <div class="new-obj">
+      <p>
+        Post description:
+      </p>
+      <textarea class="input-area" rows="1" v-model="description" placeholder="Elaborate on your topic!" />
+    </div>
+    <button id="post-submit-button" @click="submit">Submit!</button>
   </div>
-  <div class="new-obj">
-    <p>
-      Post description:
-    </p>
-    <textarea class="input-area" rows="1" v-model="description" placeholder="Elaborate on your topic!" />
-  </div>
-  <button id="post-submit-button" @click="submit">Submit!</button>
 </template>
 
 <style scoped>

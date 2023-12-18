@@ -71,26 +71,24 @@
 </script>
 
 <template>
-  <div class="main-body">
-    <div class="middle-column">
-      <div class="post-data">
-        <h1>
-          {{ title }}
-        </h1>
-        <p class="question-description">
-          {{ description }}
-        </p>
-      </div>
-      <div class="post-comments">
-        <div class="add-comment">
-          <textarea class="input-area" rows="2" v-model="newComment" placeholder="Add a comment!" />
-          <button class="submit-button" @click="submit">Submit!</button>
-        </div>
-        <CommentCard v-for="comment in postComments" :comment="comment" />
-      </div>
+  <div class="left-column">
+    <button class="side-button" @click="deletePost">Delete Post</button>
+  </div>
+  <div class="middle-column ">
+    <div class="post-data">
+      <h1>
+        {{ title }}
+      </h1>
+      <p class="question-description">
+        {{ description }}
+      </p>
     </div>
-    <div class="right-column">
-      <button class="delete-button" @click="deletePost">Delete Post</button>
+    <div class="post-comments">
+      <div class="add-comment">
+        <textarea class="input-area" rows="2" v-model="newComment" placeholder="Add a comment!" />
+        <button class="submit-button" @click="submit">Submit!</button>
+      </div>
+      <CommentCard v-for="comment in postComments" :comment="comment" />
     </div>
   </div>
 </template>
