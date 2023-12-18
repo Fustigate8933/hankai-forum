@@ -123,7 +123,7 @@
 
 
 <template>
-  <div  class="left-column" style="display: flex; flex-direction: column; width: 100%; align-items: center;">
+  <div v-if="isOP" class="left-column" style="display: flex; flex-direction: column; width: 100%; align-items: center;">
     <button class="side-button" @click="deletePost">Delete Post</button>
   </div>
   <div class="middle-column ">
