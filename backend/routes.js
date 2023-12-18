@@ -71,7 +71,11 @@ mongoClient.connect(connectionString)
             })
         })
 
-
+        router.get("/auth/user/getUser/:userId", async (req, res) => {
+            const userId = req.params.userId
+            const user = await userCollection.find({_id: new ObjectId(userId)}).toArray()
+            res.send(user)
+        })
 
 
 

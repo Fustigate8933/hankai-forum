@@ -1,13 +1,17 @@
 <script setup>
   import { useRouter } from "vue-router"
+  import { onMounted, ref } from "vue"
 
   const router = useRouter()
 
   const props = defineProps({
     comment: Object,
+    userId: String,
   })
 
   const commentId = props.comment._id
+
+  const isOP = ref(false)
 
   async function deleteComment(){
     const response = await fetch(`http://localhost:3000/api/posts/comments/del/${commentId}`, {
@@ -19,6 +23,12 @@
     })
     await router.go()
   }
+
+  onMounted(() => {
+    if (props.comment.userId === props.userId){
+      isOP.value = true
+    }
+  })
 </script>
 
 
@@ -27,7 +37,7 @@
       <p class="">
         {{ props.comment.content }}
       </p>
-      <button class="delete-button" @click="deleteComment">Delete</button>
+      <button v-if="isOP" class="delete-button" @click="deleteComment">Delete</button>
     </div>
 </template>
 

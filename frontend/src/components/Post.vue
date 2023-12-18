@@ -15,6 +15,7 @@
   const isOP = ref(false)
   const jwtToken = ref("")
   const userId = ref("")
+  const loaded = ref(false)
 
   async function getPost(){
     const response = await fetch(`http://localhost:3000/api/posts/${postId}`)
@@ -51,7 +52,8 @@
         body: JSON.stringify({
           parentId: postId,
           parentPost: true,
-          content: newComment.value
+          content: newComment.value,
+          userId: userId.value
         }),
       });
     router.go()
@@ -89,7 +91,7 @@
     if (userId.value === postUserId.value){
       isOP.value = true
     }
-    console.log(isOP.value)
+    loaded.value = true
   }
 
   function isLoggedIn(){
@@ -136,7 +138,7 @@
         <textarea class="input-area" rows="2" v-model="newComment" placeholder="Add a comment!" />
         <button class="side-button submit-button" @click="submit">Submit!</button>
       </div>
-      <CommentCard v-for="comment in postComments" :comment="comment" />
+      <CommentCard v-if="loaded" v-for="comment in postComments" :comment="comment" :userId="userId" />
     </div>
   </div>
   <div v-if="!loggedIn" class="right-column">
@@ -188,10 +190,5 @@
 .question-description{
   font-size: large;
   font-weight: 400;
-}
-
-.post-data{
-  //border-bottom: 1px white solid;
-  //margin-bottom: 40px;
 }
 </style>
